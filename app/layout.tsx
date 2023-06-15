@@ -42,7 +42,7 @@ export default function RootLayout({
                 </MenuItem>
               </li>
               <li>
-                <MenuItem href="#">
+                <MenuItem href="/menu">
                   <Utensils className="text-gray-500 group-hover:text-gray-700" />
                   <span className="flex-1 ml-3 whitespace-nowrap">Menu</span>
                   {/* <span className="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-300">
@@ -51,19 +51,19 @@ export default function RootLayout({
                 </MenuItem>
               </li>
               <li>
-                <MenuItem href="#">
+                <MenuItem href="/orders">
                   <Receipt className="text-gray-500 group-hover:text-gray-700" />
                   <span className="flex-1 ml-3 whitespace-nowrap">Orders</span>
                 </MenuItem>
               </li>
               <li>
-                <MenuItem href="#">
+                <MenuItem href="/sale">
                   <CreditCard className="text-gray-500 group-hover:text-gray-700" />
                   <span className="flex-1 ml-3 whitespace-nowrap">Sale</span>
                 </MenuItem>
               </li>
               <li>
-                <MenuItem href="#">
+                <MenuItem href="/employees">
                   <Contact className="text-gray-500 group-hover:text-gray-700" />
                   <span className="flex-1 ml-3 whitespace-nowrap">
                     Employees
@@ -71,7 +71,7 @@ export default function RootLayout({
                 </MenuItem>
               </li>
               <li>
-                <MenuItem href="#">
+                <MenuItem href="/customer-management">
                   <User2 className="text-gray-500 group-hover:text-gray-700" />
                   <span className="flex-1 ml-3 whitespace-nowrap">
                     Customer Management
@@ -79,7 +79,7 @@ export default function RootLayout({
                 </MenuItem>
               </li>
               <li>
-                <MenuItem href="#">
+                <MenuItem href="/promotions">
                   <CircleDollarSign className="text-gray-500 group-hover:text-gray-700" />
                   <span className="flex-1 ml-3 whitespace-nowrap">
                     Promotions
@@ -95,7 +95,7 @@ export default function RootLayout({
                 </MenuItem>
               </li>
               <li>
-                <MenuItem href="#">
+                <MenuItem href="/logout">
                   <LogOut className="text-gray-500 group-hover:text-gray-700" />
                   <span className="ml-3">Log Out</span>
                 </MenuItem>

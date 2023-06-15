@@ -1,3 +1,4 @@
+import { MenuItem } from "@/components/menu-item";
 import {
   CircleDollarSign,
   Contact,
@@ -10,7 +11,6 @@ import {
   Utensils,
 } from "lucide-react";
 import { Inter } from "next/font/google";
-import Link from "next/link";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -36,96 +36,69 @@ export default function RootLayout({
           <div className="h-full flex flex-col px-3 py-4 overflow-y-auto bg-gray-50">
             <ul className="space-y-2 font-medium">
               <li>
-                <Link
-                  href="/"
-                  className="flex items-center p-2 text-gray-800 rounded-lg dark:text-white hover:bg-gray-100 group"
-                >
+                <MenuItem href="/">
                   <PanelLeftInactive className="text-gray-500 group-hover:text-gray-700" />
                   <span className="ml-3">Dashboard</span>
-                </Link>
+                </MenuItem>
               </li>
               <li>
-                <Link
-                  href="#"
-                  className="flex items-center p-2 text-gray-800 rounded-lg dark:text-white hover:bg-gray-100 group"
-                >
+                <MenuItem href="#">
                   <Utensils className="text-gray-500 group-hover:text-gray-700" />
                   <span className="flex-1 ml-3 whitespace-nowrap">Menu</span>
                   {/* <span className="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-300">
                   Menu Items
                 </span> */}
-                </Link>
+                </MenuItem>
               </li>
               <li>
-                <Link
-                  href="#"
-                  className="flex items-center p-2 text-gray-800 rounded-lg dark:text-white hover:bg-gray-100 group"
-                >
+                <MenuItem href="#">
                   <Receipt className="text-gray-500 group-hover:text-gray-700" />
                   <span className="flex-1 ml-3 whitespace-nowrap">Orders</span>
-                </Link>
+                </MenuItem>
               </li>
               <li>
-                <Link
-                  href="#"
-                  className="flex items-center p-2 text-gray-800 rounded-lg dark:text-white hover:bg-gray-100 group"
-                >
+                <MenuItem href="#">
                   <CreditCard className="text-gray-500 group-hover:text-gray-700" />
                   <span className="flex-1 ml-3 whitespace-nowrap">Sale</span>
-                </Link>
+                </MenuItem>
               </li>
               <li>
-                <Link
-                  href="#"
-                  className="flex items-center p-2 text-gray-800 rounded-lg dark:text-white hover:bg-gray-100 group"
-                >
+                <MenuItem href="#">
                   <Contact className="text-gray-500 group-hover:text-gray-700" />
                   <span className="flex-1 ml-3 whitespace-nowrap">
                     Employees
                   </span>
-                </Link>
+                </MenuItem>
               </li>
               <li>
-                <Link
-                  href="#"
-                  className="flex items-center p-2 text-gray-800 rounded-lg dark:text-white hover:bg-gray-100 group"
-                >
+                <MenuItem href="#">
                   <User2 className="text-gray-500 group-hover:text-gray-700" />
                   <span className="flex-1 ml-3 whitespace-nowrap">
                     Customer Management
                   </span>
-                </Link>
+                </MenuItem>
               </li>
               <li>
-                <Link
-                  href="#"
-                  className="flex items-center p-2 text-gray-800 rounded-lg dark:text-white hover:bg-gray-100 group"
-                >
+                <MenuItem href="#">
                   <CircleDollarSign className="text-gray-500 group-hover:text-gray-700" />
                   <span className="flex-1 ml-3 whitespace-nowrap">
                     Promotions
                   </span>
-                </Link>
+                </MenuItem>
               </li>
             </ul>
             <ul className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
               <li>
-                <Link
-                  href="/settings"
-                  className="flex items-center p-2 text-gray-800 transition duration-75 rounded-lg hover:bg-gray-100 group dark:text-white group"
-                >
+                <MenuItem href="/settings">
                   <Settings className="text-gray-500 group-hover:text-gray-700" />
                   <span className="ml-4">Settings</span>
-                </Link>
+                </MenuItem>
               </li>
               <li>
-                <Link
-                  href="#"
-                  className="flex items-center p-2 text-gray-800 transition duration-75 rounded-lg hover:bg-gray-100 group dark:text-white group"
-                >
+                <MenuItem href="#">
                   <LogOut className="text-gray-500 group-hover:text-gray-700" />
                   <span className="ml-3">Log Out</span>
-                </Link>
+                </MenuItem>
               </li>
             </ul>
             <p className="mt-auto font-medium text-gray-800">

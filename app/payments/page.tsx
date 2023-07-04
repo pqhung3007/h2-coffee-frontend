@@ -1,46 +1,25 @@
-import { Payment, columns } from "./columns";
+import { columns } from "./columns";
 import { DataTable } from "./data-table";
 
-async function getPayments(): Promise<Payment[]> {
-  return [
-    {
-      id: "m5gr84i9",
-      amount: 316,
-      status: "success",
-      email: "ken99@yahoo.com",
-    },
-    {
-      id: "3u1reuv4",
-      amount: 242,
-      status: "success",
-      email: "Abe45@gmail.com",
-    },
-    {
-      id: "derv1ws0",
-      amount: 837,
-      status: "processing",
-      email: "Monserrat44@gmail.com",
-    },
-    {
-      id: "5kma53ae",
-      amount: 874,
-      status: "success",
-      email: "Silas22@gmail.com",
-    },
-    {
-      id: "bhqecj4p",
-      amount: 721,
-      status: "failed",
-      email: "carmella@hotmail.com",
-    },
-  ];
+async function getProducts(): Promise<any> {
+  const response = await fetch(
+    "https://localhost:7133/api/v1/Product/GetProducts?Offset=0&Limit=3"
+  );
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  const data = await response.json();
+  return data.Items;
 }
 
 export default async function DemoPage() {
-  const data = await getPayments();
+  const data = await getProducts();
+  console.log(data);
 
   return (
     <div className="container mx-auto py-10">
+      <h1 className="text-3xl font-semibold mb-8">List of products</h1>
       <DataTable columns={columns} data={data} />
     </div>
   );

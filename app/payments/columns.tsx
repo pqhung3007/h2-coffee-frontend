@@ -20,6 +20,10 @@ export const columns: ColumnDef<Payment>[] = [
     header: "Name",
   },
   {
+    accessorKey: "Category.Name",
+    header: "Category",
+  },
+  {
     accessorKey: "UnitsInStock",
     header: "Units In Stock",
   },
@@ -30,5 +34,11 @@ export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "CreatedDate",
     header: "Created Date",
+    cell: ({ row }) => {
+      const date = row.getValue("CreatedDate");
+      if (typeof date === "string") {
+        return <span>{new Date(date).toLocaleDateString()}</span>;
+      }
+    },
   },
 ];

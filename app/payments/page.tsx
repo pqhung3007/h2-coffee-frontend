@@ -15,7 +15,6 @@ async function getProducts(): Promise<any> {
 
 export default async function DemoPage() {
   const data = await getProducts();
-  console.log(data);
 
   return (
     <div className="container mx-auto py-10">

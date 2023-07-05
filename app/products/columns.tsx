@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 
 export interface Product {
   Id: string;
@@ -26,7 +26,21 @@ export interface Product {
 export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "Name",
-    header: "Name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="flex justify-center"
+        >
+          Product Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="text-center">{row.getValue("Name")}</div>
+    ),
   },
   {
     accessorKey: "Category.Name",
@@ -54,7 +68,6 @@ export const columns: ColumnDef<Product>[] = [
     id: "actions",
     cell: ({ row }) => {
       const product = row.original;
-      console.log("🚀 ~ file: columns.tsx:53 ~ product:", product);
 
       return (
         <DropdownMenu>

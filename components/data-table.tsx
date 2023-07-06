@@ -22,6 +22,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+
+import Link from "next/link";
 import { useState } from "react";
 
 interface DataTableProps<TData, TValue> {
@@ -56,7 +58,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center">
+      <div className="flex items-center justify-between">
         <Input
           placeholder="Filter by product name..."
           value={(table.getColumn("Name")?.getFilterValue() as string) ?? ""}
@@ -65,6 +67,15 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+
+        <Link
+          href={{
+            pathname: "/products/new-product",
+          }}
+          className="text-white text-sm bg-slate-700 hover:bg-slate-800 font-semibold py-2 px-4 rounded-md"
+        >
+          Create New Product
+        </Link>
       </div>
 
       <div className="rounded-md border">

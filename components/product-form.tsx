@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { Checkbox } from "./ui/checkbox";
 import {
   Form,
@@ -42,9 +43,49 @@ const FormSchema = z.object({
   description: z.string().min(10).max(1000),
 });
 
-export default function ProductForm({ title }: { title: string }) {
+export interface Product {
+  Id: string;
+  Name: string;
+  Category: {
+    Id: string;
+    Name: string;
+  };
+  UnitsInStock: number;
+  UnitPrice: number;
+  CategoryId: number;
+  IsSignature: boolean;
+  Description: string;
+}
+
+export default function ProductForm({
+  title,
+  id,
+}: {
+  title: string;
+  id?: string;
+}) {
   const { toast } = useToast();
+
   const router = useRouter();
+
+  const [product, setProduct] = useState<Product | null>(null);
+
+  useEffect(() => {
+    if (title === "Edit Product" && id) {
+      const onGetProductById = async () => {
+        const response = await axios.get(
+          `https://localhost:7133/api/v1/Product/${id}`
+        );
+        if (response.status === 200) {
+          const returnedProduct = response.data;
+          setProduct(returnedProduct);
+        } else {
+          console.log("failed");
+        }
+      };
+      onGetProductById();
+    }
+  }, [title, id]);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -106,7 +147,11 @@ export default function ProductForm({ title }: { title: string }) {
                     <FormItem>
                       <FormLabel>Product Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Macchiato" {...field} />
+                        <Input
+                          placeholder="Macchiato"
+                          {...field}
+                          value={product?.Name}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -123,7 +168,11 @@ export default function ProductForm({ title }: { title: string }) {
                     <FormItem>
                       <FormLabel>Unit In Stock</FormLabel>
                       <FormControl>
-                        <Input placeholder="0" {...field} />
+                        <Input
+                          placeholder="0"
+                          {...field}
+                          value={product?.UnitsInStock}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -140,7 +189,11 @@ export default function ProductForm({ title }: { title: string }) {
                     <FormItem>
                       <FormLabel>Price</FormLabel>
                       <FormControl>
-                        <Input placeholder="$0.00" {...field} />
+                        <Input
+                          placeholder="$0.00"
+                          {...field}
+                          value={product?.UnitPrice}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -192,7 +245,7 @@ export default function ProductForm({ title }: { title: string }) {
                     <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                       <FormControl>
                         <Checkbox
-                          checked={field.value}
+                          checked={product?.IsSignature}
                           onCheckedChange={field.onChange as () => void}
                         />
                       </FormControl>
@@ -216,6 +269,7 @@ export default function ProductForm({ title }: { title: string }) {
                         <Textarea
                           placeholder="Give a short description about the product."
                           className="resize-none"
+                          defaultValue={product?.Description}
                           {...field}
                         />
                       </FormControl>

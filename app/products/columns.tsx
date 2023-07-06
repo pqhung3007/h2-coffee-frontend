@@ -1,13 +1,27 @@
 "use client";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { deleteProduct } from "@/utils/api";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 
@@ -84,12 +98,37 @@ export const columns: ColumnDef<Product>[] = [
             >
               Copy product name
             </DropdownMenuItem>
-            {/* navigate to home when selecting*/}
             <DropdownMenuItem
               onClick={() => (window.location.href = `/products/${product.Id}`)}
             >
               View product details
             </DropdownMenuItem>
+            <DropdownMenuSeparator />
+
+            <AlertDialog>
+              <AlertDialogTrigger className="text-red-600 text-sm px-2">
+                Delete product
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Do you really want to delete this product?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    className="bg-red-600"
+                    onClick={() => deleteProduct(product.Id)}
+                  >
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </DropdownMenuContent>
         </DropdownMenu>
       );

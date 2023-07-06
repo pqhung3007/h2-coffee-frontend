@@ -191,7 +191,7 @@ export default function ProductForm({ title }: { title: string }) {
                       <FormControl>
                         <Checkbox
                           checked={field.value}
-                          onChange={field.onChange as () => void}
+                          onCheckedChange={field.onChange as () => void}
                         />
                       </FormControl>
                       <div className="space-y-1 leading-none">

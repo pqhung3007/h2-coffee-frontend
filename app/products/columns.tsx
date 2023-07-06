@@ -52,9 +52,7 @@ export const columns: ColumnDef<Product>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="text-center">{row.getValue("Name")}</div>
-    ),
+    cell: ({ row }) => <div className="ml-2">{row.getValue("Name")}</div>,
   },
   {
     accessorKey: "CategoryName",

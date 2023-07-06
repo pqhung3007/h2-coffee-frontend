@@ -284,7 +284,7 @@ export default function ProductForm({
               type="submit"
               className="inline-flex items-center px-5 py-2.5 mt-8 text-sm font-medium text-center text-white bg-gray-700 rounded-md"
             >
-              Add product
+              {title === "Edit Product" ? "Update" : "Create"}
             </button>
           </form>
         </Form>

@@ -1,4 +1,6 @@
 import { MenuItem } from "@/components/menu-item";
+import { Toaster } from "@/components/ui/toaster";
+
 import {
   CircleDollarSign,
   Contact,
@@ -108,6 +110,7 @@ export default function RootLayout({
         </aside>
 
         <main className="pl-64 overflow-x-auto w-screen">{children}</main>
+        <Toaster />
       </body>
     </html>
   );

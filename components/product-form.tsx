@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -23,6 +24,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
+import { useToast } from "./ui/use-toast";
 
 const categories = [
   { label: "Juice", value: "2" },
@@ -41,6 +43,9 @@ const FormSchema = z.object({
 });
 
 export default function ProductForm({ title }: { title: string }) {
+  const { toast } = useToast();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -71,7 +76,12 @@ export default function ProductForm({ title }: { title: string }) {
       );
 
       if (response.status === 200) {
-        console.log("success");
+        toast({
+          title: "Product created",
+          description: `${data.productName} has been created`,
+        });
+        // redirect to product list
+        router.push("/products");
       } else {
         console.log("failed");
       }

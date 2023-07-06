@@ -4,17 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { cn } from "@/lib/utils";
-import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
-import { Button } from "./ui/button";
+import axios from "axios";
 import { Checkbox } from "./ui/checkbox";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "./ui/command";
 import {
   Form,
   FormControl,
@@ -24,22 +15,28 @@ import {
   FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 import { Textarea } from "./ui/textarea";
 
 const categories = [
-  { label: "Juice", value: "Juice" },
-  { label: "Coffee", value: "Coffee" },
-  { label: "Beverage", value: "Beverage" },
-  { label: "Sweet", value: "Sweet" },
+  { label: "Juice", value: "2" },
+  { label: "Coffee", value: "3" },
+  { label: "Beverage", value: "1" },
+  { label: "Sweet", value: "4" },
 ] as const;
 
 const FormSchema = z.object({
   productName: z.string().nonempty(),
-  unitsInStock: z.number().int().positive(),
-  price: z.number().int().positive(),
+  unitsInStock: z.string(),
+  price: z.string(),
   category: z.string(),
-  mobile: z.boolean().default(false).optional(),
+  isSignature: z.boolean().default(false).optional(),
   description: z.string().min(10).max(1000),
 });
 
@@ -48,16 +45,39 @@ export default function ProductForm({ title }: { title: string }) {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       productName: "",
-      unitsInStock: 0,
-      price: 0,
+      unitsInStock: "0",
+      price: "0",
       category: "",
-      mobile: false,
+      isSignature: false,
       description: "",
     },
   });
 
-  const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    console.log(data);
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    try {
+      const response = await axios.post(
+        "https://localhost:7133/api/v1/Product/CreateProduct",
+        {
+          Name: data.productName,
+          CategoryId: parseInt(data.category),
+          UnitsInStock: parseInt(data.unitsInStock),
+          Description: data.description,
+          UnitPrice: parseInt(data.price),
+          IsSignature: data.isSignature,
+          Discount: 0,
+          Status: "Inactive",
+          ImageUrl: "string",
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("success");
+      } else {
+        console.log("failed");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -122,58 +142,30 @@ export default function ProductForm({ title }: { title: string }) {
               <div>
                 <FormField
                   control={form.control}
-                  name="productName"
+                  name="category"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
                       <FormLabel>Category</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant="outline"
-                              role="combobox"
-                              className={cn(
-                                "w-full justify-between",
-                                !field.value && "text-muted-foreground"
-                              )}
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a verified email to display" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {categories.map((category) => (
+                            <SelectItem
+                              key={category.value}
+                              value={category.value}
                             >
-                              {field.value
-                                ? categories.find(
-                                    (category) => category.value === field.value
-                                  )?.label
-                                : "Select category"}
-                              <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[200px] p-0">
-                          <Command>
-                            <CommandInput placeholder="Search category..." />
-                            <CommandEmpty>No category found.</CommandEmpty>
-                            <CommandGroup>
-                              {categories.map((category) => (
-                                <CommandItem
-                                  value={category.value}
-                                  key={category.value}
-                                  onSelect={(value) => {
-                                    form.setValue("category", value);
-                                  }}
-                                >
-                                  <CheckIcon
-                                    className={cn(
-                                      "mr-2 h-4 w-4",
-                                      category.value === field.value
-                                        ? "opacity-100"
-                                        : "opacity-0"
-                                    )}
-                                  />
-                                  {category.label}
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
+                              {category.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
 
                       <FormMessage />
                     </FormItem>
@@ -185,7 +177,7 @@ export default function ProductForm({ title }: { title: string }) {
               <div>
                 <FormField
                   control={form.control}
-                  name="mobile"
+                  name="isSignature"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                       <FormControl>

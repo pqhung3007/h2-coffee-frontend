@@ -43,7 +43,7 @@ export const columns: ColumnDef<Product>[] = [
     ),
   },
   {
-    accessorKey: "Category.Name",
+    accessorKey: "CategoryName",
     header: "Category",
   },
   {

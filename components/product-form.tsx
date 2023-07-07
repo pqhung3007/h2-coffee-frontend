@@ -40,7 +40,7 @@ const FormSchema = z.object({
   price: z.string(),
   category: z.string(),
   isSignature: z.boolean().default(false).optional(),
-  description: z.string().min(10).max(1000),
+  description: z.string().min(10),
 });
 
 export interface Product {
@@ -122,26 +122,26 @@ export default function ProductForm({
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = async (product: z.infer<typeof FormSchema>) => {
     if (!isAddMode) {
-      await onUpdateProduct(data);
+      await onUpdateProduct();
     } else {
-      await onCreateProduct(data);
+      await onCreateProduct(product);
     }
   };
 
-  const onUpdateProduct = async (data: z.infer<typeof FormSchema>) => {
+  const onUpdateProduct = async () => {
     try {
       const response = await axios.post(
         "https://localhost:7133/api/v1/Product/UpdateProduct",
         {
           Id: id,
-          Name: data.productName,
-          CategoryId: parseInt(data.category),
-          UnitsInStock: parseInt(data.unitsInStock),
-          Description: data.description,
-          UnitPrice: parseInt(data.price),
-          IsSignature: data.isSignature,
+          Name: product.Name,
+          CategoryId: product.CategoryId,
+          UnitsInStock: product.UnitsInStock,
+          Description: product.Description,
+          UnitPrice: product.UnitPrice,
+          IsSignature: product.IsSignature,
           Discount: 0,
           Status: "Inactive",
           ImageUrl: "string",
@@ -160,17 +160,17 @@ export default function ProductForm({
     }
   };
 
-  const onCreateProduct = async (data: z.infer<typeof FormSchema>) => {
+  const onCreateProduct = async (product: z.infer<typeof FormSchema>) => {
     try {
       const response = await axios.post(
         "https://localhost:7133/api/v1/Product/CreateProduct",
         {
-          Name: data.productName,
-          CategoryId: parseInt(data.category),
-          UnitsInStock: parseInt(data.unitsInStock),
-          Description: data.description,
-          UnitPrice: parseInt(data.price),
-          IsSignature: data.isSignature,
+          Name: product.productName,
+          CategoryId: parseInt(product.category),
+          UnitsInStock: parseInt(product.unitsInStock),
+          Description: product.description,
+          UnitPrice: parseInt(product.price),
+          IsSignature: product.isSignature,
           Discount: 0,
           Status: "Inactive",
           ImageUrl: "string",
@@ -180,7 +180,7 @@ export default function ProductForm({
       if (response.status === 200) {
         toast({
           title: "Product created",
-          description: `${data.productName} has been created`,
+          description: `${product.productName} has been created`,
         });
         // redirect to product list
         router.push("/products");
@@ -346,7 +346,6 @@ export default function ProductForm({
                           placeholder="Give a short description about the product."
                           className="resize-none"
                           {...register("description")}
-                          defaultValue={product?.Description}
                           onChange={(e) => {
                             field.onChange(e.target.value);
                             setProduct({

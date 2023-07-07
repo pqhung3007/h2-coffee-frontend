@@ -44,12 +44,11 @@ export default function RootLayout({
                 </MenuItem>
               </li>
               <li>
-                <MenuItem href="/menu">
+                <MenuItem href="/products">
                   <Utensils className="text-gray-500 group-hover:text-gray-700" />
-                  <span className="flex-1 ml-3 whitespace-nowrap">Menu</span>
-                  {/* <span className="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-300">
-                  Menu Items
-                </span> */}
+                  <span className="flex-1 ml-3 whitespace-nowrap">
+                    Products
+                  </span>
                 </MenuItem>
               </li>
               <li>

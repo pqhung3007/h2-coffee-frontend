@@ -123,7 +123,6 @@ export default function ProductForm({
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    // if the title is edit product, then we will update the product. Otherwise, we will create a new product
     if (!isAddMode) {
       await onUpdateProduct(data);
     } else {
@@ -321,7 +320,7 @@ export default function ProductForm({
                     <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                       <FormControl>
                         <Checkbox
-                          checked={product?.IsSignature}
+                          {...register("isSignature")}
                           onCheckedChange={field.onChange as () => void}
                           {...register("isSignature")}
                         />

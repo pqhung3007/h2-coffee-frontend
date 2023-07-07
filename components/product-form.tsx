@@ -35,7 +35,7 @@ const categories = [
 ] as const;
 
 const FormSchema = z.object({
-  productName: z.string().nonempty(),
+  productName: z.string(),
   unitsInStock: z.string(),
   price: z.string(),
   category: z.string(),
@@ -65,6 +65,7 @@ export default function ProductForm({
   title: string;
   id?: string;
 }) {
+  const isAddMode = !id;
   const { toast } = useToast();
 
   const router = useRouter();
@@ -86,20 +87,20 @@ export default function ProductForm({
   });
 
   useEffect(() => {
-    if (title === "Edit Product" && id) {
+    if (!isAddMode) {
       const onGetProductById = async () => {
         const response = await axios.get(
           `https://localhost:7133/api/v1/Product/${id}`
         );
         if (response.status === 200) {
           const returnedProduct = response.data;
+
           setValue("productName", returnedProduct.Name);
           setValue("unitsInStock", returnedProduct.UnitsInStock.toString());
           setValue("price", returnedProduct.UnitPrice.toString());
           setValue("category", returnedProduct.CategoryId.toString());
           setValue("isSignature", returnedProduct.IsSignature);
           setValue("description", returnedProduct.Description);
-          console.log(returnedProduct);
           setProduct(returnedProduct);
         } else {
           console.log("failed");
@@ -107,7 +108,7 @@ export default function ProductForm({
       };
       onGetProductById();
     }
-  }, [title, id, setValue]);
+  }, [isAddMode, id, setValue]);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -123,7 +124,7 @@ export default function ProductForm({
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     // if the title is edit product, then we will update the product. Otherwise, we will create a new product
-    if (title === "Edit Product") {
+    if (!isAddMode) {
       await onUpdateProduct(data);
     } else {
       await onCreateProduct(data);
@@ -367,7 +368,7 @@ export default function ProductForm({
               type="submit"
               className="inline-flex items-center px-5 py-2.5 mt-8 text-sm font-medium text-center text-white bg-gray-700 rounded-md"
             >
-              {title === "Edit Product" ? "Update" : "Create"}
+              {isAddMode ? "Create" : "Update"}
             </button>
           </form>
         </Form>

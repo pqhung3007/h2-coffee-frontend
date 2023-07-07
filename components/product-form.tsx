@@ -44,7 +44,8 @@ const FormSchema = z.object({
 });
 
 export interface Product {
-  Id: string;
+  Id: number;
+
   Name: string;
   Category: {
     Id: string;
@@ -68,7 +69,21 @@ export default function ProductForm({
 
   const router = useRouter();
 
-  const [product, setProduct] = useState<Product | null>(null);
+  const { setValue, register } = useForm();
+
+  const [product, setProduct] = useState<Product>({
+    Id: 0,
+    Name: "",
+    Category: {
+      Id: "",
+      Name: "",
+    },
+    UnitsInStock: 0,
+    UnitPrice: 0,
+    CategoryId: 0,
+    IsSignature: false,
+    Description: "",
+  });
 
   useEffect(() => {
     if (title === "Edit Product" && id) {
@@ -78,6 +93,13 @@ export default function ProductForm({
         );
         if (response.status === 200) {
           const returnedProduct = response.data;
+          setValue("productName", returnedProduct.Name);
+          setValue("unitsInStock", returnedProduct.UnitsInStock.toString());
+          setValue("price", returnedProduct.UnitPrice.toString());
+          setValue("category", returnedProduct.CategoryId.toString());
+          setValue("isSignature", returnedProduct.IsSignature);
+          setValue("description", returnedProduct.Description);
+          console.log(returnedProduct);
           setProduct(returnedProduct);
         } else {
           console.log("failed");
@@ -85,7 +107,7 @@ export default function ProductForm({
       };
       onGetProductById();
     }
-  }, [title, id]);
+  }, [title, id, setValue]);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -100,6 +122,45 @@ export default function ProductForm({
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    // if the title is edit product, then we will update the product. Otherwise, we will create a new product
+    if (title === "Edit Product") {
+      await onUpdateProduct(data);
+    } else {
+      await onCreateProduct(data);
+    }
+  };
+
+  const onUpdateProduct = async (data: z.infer<typeof FormSchema>) => {
+    try {
+      const response = await axios.post(
+        "https://localhost:7133/api/v1/Product/UpdateProduct",
+        {
+          Id: id,
+          Name: data.productName,
+          CategoryId: parseInt(data.category),
+          UnitsInStock: parseInt(data.unitsInStock),
+          Description: data.description,
+          UnitPrice: parseInt(data.price),
+          IsSignature: data.isSignature,
+          Discount: 0,
+          Status: "Inactive",
+          ImageUrl: "string",
+        }
+      );
+
+      if (response.status === 200) {
+        toast({
+          title: "Product updated",
+        });
+        // redirect to product list
+        router.push("/products");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onCreateProduct = async (data: z.infer<typeof FormSchema>) => {
     try {
       const response = await axios.post(
         "https://localhost:7133/api/v1/Product/CreateProduct",
@@ -123,8 +184,6 @@ export default function ProductForm({
         });
         // redirect to product list
         router.push("/products");
-      } else {
-        console.log("failed");
       }
     } catch (error) {
       console.log(error);
@@ -149,8 +208,11 @@ export default function ProductForm({
                       <FormControl>
                         <Input
                           placeholder="Macchiato"
-                          {...field}
-                          value={product?.Name}
+                          {...register("productName")}
+                          onChange={(e) => {
+                            field.onChange(e.target.value);
+                            setProduct({ ...product, Name: e.target.value });
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -170,8 +232,14 @@ export default function ProductForm({
                       <FormControl>
                         <Input
                           placeholder="0"
-                          {...field}
-                          value={product?.UnitsInStock}
+                          {...register("unitsInStock")}
+                          onChange={(e) => {
+                            field.onChange(e.target.value);
+                            setProduct({
+                              ...product,
+                              UnitsInStock: +e.target.value,
+                            });
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -191,8 +259,14 @@ export default function ProductForm({
                       <FormControl>
                         <Input
                           placeholder="$0.00"
-                          {...field}
-                          value={product?.UnitPrice}
+                          {...register("price")}
+                          onChange={(e) => {
+                            field.onChange(e.target.value);
+                            setProduct({
+                              ...product,
+                              UnitPrice: +e.target.value,
+                            });
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -212,10 +286,11 @@ export default function ProductForm({
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
+                        {...register("category")}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a verified email to display" />
+                            <SelectValue placeholder="Select a category" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -247,6 +322,7 @@ export default function ProductForm({
                         <Checkbox
                           checked={product?.IsSignature}
                           onCheckedChange={field.onChange as () => void}
+                          {...register("isSignature")}
                         />
                       </FormControl>
                       <div className="space-y-1 leading-none">
@@ -269,8 +345,15 @@ export default function ProductForm({
                         <Textarea
                           placeholder="Give a short description about the product."
                           className="resize-none"
+                          {...register("description")}
                           defaultValue={product?.Description}
-                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e.target.value);
+                            setProduct({
+                              ...product,
+                              Description: e.target.value,
+                            });
+                          }}
                         />
                       </FormControl>
                       <FormMessage />

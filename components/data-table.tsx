@@ -70,7 +70,7 @@ export function DataTable<TData, TValue>({
 
         <Link
           href={{
-            pathname: "/products/new-product",
+            pathname: "/admin/products/new-product",
           }}
           className="text-white text-sm bg-slate-700 hover:bg-slate-800 font-semibold py-2 px-4 rounded-md"
         >

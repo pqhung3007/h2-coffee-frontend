@@ -1,17 +1,5 @@
-import { MenuItem } from "@/components/menu-item";
 import { Toaster } from "@/components/ui/toaster";
 
-import {
-  CircleDollarSign,
-  Contact,
-  CreditCard,
-  LogOut,
-  PanelLeftInactive,
-  Receipt,
-  Settings,
-  User2,
-  Utensils,
-} from "lucide-react";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -30,85 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <aside
-          id="separator-sidebar"
-          className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
-          aria-label="Sidebar"
-        >
-          <div className="h-full flex flex-col px-3 py-4 overflow-y-auto bg-gray-50">
-            <ul className="space-y-2 font-medium">
-              <li>
-                <MenuItem href="/">
-                  <PanelLeftInactive className="text-gray-500 group-hover:text-gray-700" />
-                  <span className="ml-3">Dashboard</span>
-                </MenuItem>
-              </li>
-              <li>
-                <MenuItem href="/products">
-                  <Utensils className="text-gray-500 group-hover:text-gray-700" />
-                  <span className="flex-1 ml-3 whitespace-nowrap">
-                    Products
-                  </span>
-                </MenuItem>
-              </li>
-              <li>
-                <MenuItem href="/orders">
-                  <Receipt className="text-gray-500 group-hover:text-gray-700" />
-                  <span className="flex-1 ml-3 whitespace-nowrap">Orders</span>
-                </MenuItem>
-              </li>
-              <li>
-                <MenuItem href="/sale">
-                  <CreditCard className="text-gray-500 group-hover:text-gray-700" />
-                  <span className="flex-1 ml-3 whitespace-nowrap">Sale</span>
-                </MenuItem>
-              </li>
-              <li>
-                <MenuItem href="/employees">
-                  <Contact className="text-gray-500 group-hover:text-gray-700" />
-                  <span className="flex-1 ml-3 whitespace-nowrap">
-                    Employees
-                  </span>
-                </MenuItem>
-              </li>
-              <li>
-                <MenuItem href="/customer-management">
-                  <User2 className="text-gray-500 group-hover:text-gray-700" />
-                  <span className="flex-1 ml-3 whitespace-nowrap">
-                    Customer Management
-                  </span>
-                </MenuItem>
-              </li>
-              <li>
-                <MenuItem href="/promotions">
-                  <CircleDollarSign className="text-gray-500 group-hover:text-gray-700" />
-                  <span className="flex-1 ml-3 whitespace-nowrap">
-                    Promotions
-                  </span>
-                </MenuItem>
-              </li>
-            </ul>
-            <ul className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
-              <li>
-                <MenuItem href="/settings">
-                  <Settings className="text-gray-500 group-hover:text-gray-700" />
-                  <span className="ml-4">Settings</span>
-                </MenuItem>
-              </li>
-              <li>
-                <MenuItem href="/logout">
-                  <LogOut className="text-gray-500 group-hover:text-gray-700" />
-                  <span className="ml-3">Log Out</span>
-                </MenuItem>
-              </li>
-            </ul>
-            <p className="mt-auto font-medium text-gray-800">
-              Welcome back, admin!
-            </p>
-          </div>
-        </aside>
-
-        <main className="pl-64 overflow-x-auto w-screen">{children}</main>
+        <main>{children}</main>
         <Toaster />
       </body>
     </html>

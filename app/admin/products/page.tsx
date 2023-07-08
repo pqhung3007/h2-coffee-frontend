@@ -1,5 +1,5 @@
+import { DataTable } from "@/components/data-table";
 import axios from "axios";
-import { DataTable } from "../../components/data-table";
 import { columns } from "./columns";
 
 async function getProducts(): Promise<any> {

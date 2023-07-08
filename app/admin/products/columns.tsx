@@ -97,7 +97,9 @@ export const columns: ColumnDef<Product>[] = [
               Copy product name
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => (window.location.href = `/products/${product.Id}`)}
+              onClick={() =>
+                (window.location.href = `/admin/products/${product.Id}`)
+              }
             >
               View product details
             </DropdownMenuItem>

@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import * as z from "zod";
 
 import { cn } from "@/lib/utils";
+import { loginUser } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "./ui/button";
 import {
@@ -16,46 +18,60 @@ import {
   FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
+import { toast } from "./ui/use-toast";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 interface IconProps extends React.SVGAttributes<SVGElement> {}
 
 const formSchema = z.object({
-  email: z.string().email(),
+  username: z.string(),
   password: z.string().min(6),
 });
 
 export default function AuthForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
 
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault();
-    setIsLoading(true);
+  const router = useRouter();
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-  }
+  const { mutate: login, isLoading } = useMutation(
+    (data: z.infer<typeof formSchema>) =>
+      loginUser(data.username, data.password),
+    {
+      onSuccess: (res) => {
+        localStorage.setItem("Token", res.Token);
+        router.push("/admin/products");
+      },
+      onError: (err: Error) => {
+        toast({
+          variant: "destructive",
+          title: "Oh no something is wrong!",
+          description: err.message,
+        });
+      },
+    }
+  );
+
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    login(data);
+  };
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <Form {...form}>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid gap-4">
             <FormField
               control={form.control}
-              name="email"
+              name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>username</FormLabel>
                   <FormControl>
                     <Input placeholder="abc@gmail.com" {...field} />
                   </FormControl>
@@ -80,7 +96,7 @@ export default function AuthForm({ className, ...props }: UserAuthFormProps) {
               {isLoading && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}
-              Sign In with Email
+              Sign In with username
             </Button>
           </div>
         </form>

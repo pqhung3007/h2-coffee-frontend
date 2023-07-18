@@ -1,10 +1,15 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { format } from "date-fns";
+import { CalendarDays } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { Button } from "./ui/button";
+import { Calendar } from "./ui/calendar";
 import {
   Form,
   FormControl,
@@ -14,6 +19,7 @@ import {
   FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { useToast } from "./ui/use-toast";
 
 const FormSchema = z.object({
@@ -21,6 +27,12 @@ const FormSchema = z.object({
     .string()
     .min(3, {
       message: "Username must be at least 3 characters long",
+    })
+    .max(20),
+  password: z
+    .string()
+    .min(6, {
+      message: "Password must be at least 6 characters long",
     })
     .max(20),
   firstName: z.string().min(1, {
@@ -32,6 +44,12 @@ const FormSchema = z.object({
   city: z.string().min(1, {
     message: "City is required",
   }),
+  phoneNumber: z.string().min(1, {
+    message: "Phone number is required",
+  }),
+  dob: z.date({
+    required_error: "A date of birth is required.",
+  }),
 });
 
 export default function EmployeeForm({ title }: { title: string }) {
@@ -42,9 +60,11 @@ export default function EmployeeForm({ title }: { title: string }) {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       userName: "",
+      password: "",
       firstName: "",
       lastName: "",
       city: "",
+      phoneNumber: "",
     },
   });
 
@@ -54,9 +74,12 @@ export default function EmployeeForm({ title }: { title: string }) {
         "https://localhost:7133/api/v1/User/CreateUser",
         {
           Username: data.userName,
+          Password: data.password,
           FirstName: data.firstName,
           LastName: data.lastName,
           City: data.city,
+          Phone: data.phoneNumber,
+          DateOfBirth: data.dob,
         }
       );
 
@@ -65,8 +88,9 @@ export default function EmployeeForm({ title }: { title: string }) {
           title: "New employee created",
           description: `Welcome, ${data.firstName} ${data.lastName}!`,
         });
-        // redirect to product list
         router.push("/products");
+      } else {
+        console.log(response);
       }
     } catch (error) {
       console.log(error);
@@ -128,7 +152,7 @@ export default function EmployeeForm({ title }: { title: string }) {
                 />
               </div>
 
-              <div className="sm:col-span-2">
+              <div>
                 <FormField
                   control={form.control}
                   name="city"
@@ -138,6 +162,66 @@ export default function EmployeeForm({ title }: { title: string }) {
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div>
+                <FormField
+                  control={form.control}
+                  name="phoneNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Phone Number</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div>
+                <FormField
+                  control={form.control}
+                  name="dob"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Date of birth</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-full pl-3 text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarDays className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange as () => void}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date("1900-01-01")
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
                       <FormMessage />
                     </FormItem>
                   )}

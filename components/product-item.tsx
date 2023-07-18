@@ -28,6 +28,7 @@ export default function ProductItem({
           className="h-full w-full object-cover object-center lg:h-full lg:w-full"
         />
       </div>
+      {/* TODO: add event handler here */}
       <button
         className="absolute z-20 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 bg-black/20 bg-opacity-0 text-white py-2 px-4 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
         onClick={() => console.log(Id)}

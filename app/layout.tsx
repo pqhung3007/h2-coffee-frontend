@@ -1,5 +1,6 @@
 import { Toaster } from "@/components/ui/toaster";
 
+import ProviderWrapper from "@/components/provider-wrapper";
 import QueryWrapper from "@/components/query-wrapper";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -20,7 +21,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <QueryWrapper>
-          <main>{children}</main>
+          <ProviderWrapper>
+            <main>{children}</main>
+          </ProviderWrapper>
           <Toaster />
         </QueryWrapper>
       </body>

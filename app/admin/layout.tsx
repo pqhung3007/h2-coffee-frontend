@@ -1,4 +1,7 @@
+"use client";
+
 import { MenuItem } from "@/components/menu-item";
+import useAuth from "@/utils/useAuth";
 import {
   CircleDollarSign,
   Contact,
@@ -24,6 +27,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { isLoading } = useAuth();
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <aside

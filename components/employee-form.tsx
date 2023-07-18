@@ -104,13 +104,29 @@ export default function EmployeeForm({ title }: { title: string }) {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-              <div className="sm:col-span-2">
+              <div>
                 <FormField
                   control={form.control}
                   name="userName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Username</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div>
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>

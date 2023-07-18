@@ -183,7 +183,7 @@ export default function ProductForm({
           description: `${product.productName} has been created`,
         });
         // redirect to product list
-        router.push("/products");
+        router.push("/admin/products");
       }
     } catch (error) {
       console.log(error);

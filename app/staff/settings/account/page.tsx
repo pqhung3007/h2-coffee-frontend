@@ -1,16 +1,18 @@
+import { getEmployeeDetail } from "@/api/employees";
 import AccountForm from "./account-form";
 
-export default function SettingsProfilePage() {
+export default async function SettingsProfilePage() {
+  const { Username } = await getEmployeeDetail();
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">Profile</h3>
+        <h3 className="text-lg font-medium">Account</h3>
         <p className="text-sm text-muted-foreground">
-          This is how others will see you on the site.
+          Update your account settings, including password.
         </p>
       </div>
 
-      <AccountForm />
+      <AccountForm username={Username} />
     </div>
   );
 }

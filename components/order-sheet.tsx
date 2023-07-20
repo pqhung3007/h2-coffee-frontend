@@ -117,13 +117,15 @@ export default function OrderSheet() {
           )}
         </div>
         <SheetFooter className="flex justify-between">
-          <Button
-            variant="link"
-            className="text-red-600"
-            onClick={() => dispatch(clearCart())}
-          >
-            Remove all
-          </Button>
+          {items.length ? (
+            <Button
+              variant="link"
+              className="text-red-600"
+              onClick={() => dispatch(clearCart())}
+            >
+              Remove all
+            </Button>
+          ) : null}
           <SheetClose asChild>
             <Button type="submit" disabled={numberOfItems == 0}>
               Place order

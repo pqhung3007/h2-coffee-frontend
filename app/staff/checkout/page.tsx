@@ -13,12 +13,16 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cartItems, totalPrice } from "@/features/cartSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import * as z from "zod";
 
 export default function CheckoutForm() {
+  const router = useRouter();
+
   const items = useSelector(cartItems);
   const price = useSelector(totalPrice);
 
@@ -61,9 +65,25 @@ export default function CheckoutForm() {
     },
   });
 
-  function onSubmit(data: OrderSubmission) {
-    console.log(data);
-  }
+  const onSubmit = async (data: z.infer<typeof orderSubmissionSchema>) => {
+    try {
+      const response = await axios.post("https://localhost:7133/api/v1/Order", {
+        Note: data.note,
+        EmployeeName: data.employeeName,
+        TotalCost: data.totalCost,
+        OrderDetails: data.orderDetails,
+      });
+
+      if (response.status === 200) {
+        console.log("success");
+        router.push("/staff");
+      } else {
+        console.log(response);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Form {...form}>

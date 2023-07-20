@@ -70,9 +70,26 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: "CreatedDate",
     header: "Created Date",
     cell: ({ row }) => {
-      const date = row.getValue("CreatedDate");
-      if (typeof date === "string") {
-        return <span>{new Date(date).toLocaleDateString()}</span>;
+      const createdDate = row.getValue("CreatedDate");
+      if (typeof createdDate === "string") {
+        const date = new Date(createdDate);
+        const formattedDate = date.toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
+        const formattedTime = date.toLocaleTimeString("en-GB", {
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        });
+        return (
+          <div>
+            <div>{formattedDate}</div>
+            <div>{formattedTime}</div>
+          </div>
+        );
       }
     },
   },

@@ -22,7 +22,7 @@ const cartSlice = createSlice({
     addItemToCart: (state, action: PayloadAction<OrderDetails>) => {
       const addedItem = action.payload;
       const existingItem = state.cartItems.find(
-        (item: any) => item.id === addedItem.name
+        (item: any) => item.name === addedItem.name
       );
       state.totalQuantity += addedItem.quantity;
 
@@ -30,21 +30,21 @@ const cartSlice = createSlice({
         ? (existingItem.quantity += addedItem.quantity)
         : state.cartItems.push(addedItem);
     },
-    increaseQuantity: (state, action: PayloadAction<number>) => {
+    increaseQuantity: (state, action: PayloadAction<string>) => {
       state.totalQuantity++;
       const newCart = state.cartItems.map((item: any) => {
-        if (item.id === action.payload) {
+        if (item.name === action.payload) {
           return { ...item, quantity: item.quantity + 1 };
         }
         return item;
       });
       state.cartItems = newCart;
     },
-    decreaseQuantity: (state, action: PayloadAction<number>) => {
+    decreaseQuantity: (state, action: PayloadAction<string>) => {
       state.totalQuantity--;
       const newCart = state.cartItems
         .map((item: any) => {
-          if (item.id === action.payload) {
+          if (item.name === action.payload) {
             return { ...item, quantity: item.quantity - 1 };
           }
           return item;

@@ -20,6 +20,7 @@ import {
   totalPrice,
 } from "@/features/cartSlice";
 import Image from "next/image";
+import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function OrderSheet() {
@@ -128,7 +129,7 @@ export default function OrderSheet() {
           ) : null}
           <SheetClose asChild>
             <Button type="submit" disabled={numberOfItems == 0}>
-              Place order
+              <Link href="/staff/checkout">Check out</Link>
             </Button>
           </SheetClose>
         </SheetFooter>

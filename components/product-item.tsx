@@ -1,6 +1,8 @@
 "use client";
 
+import { addItemToCart } from "@/features/cartSlice";
 import Image from "next/image";
+import { useDispatch } from "react-redux";
 
 interface ProductItemProps {
   Id: number;
@@ -17,6 +19,19 @@ export default function ProductItem({
   UnitPrice,
   ImageUrl,
 }: ProductItemProps) {
+  const dispatch = useDispatch();
+
+  const handleAddItem = () => {
+    dispatch(
+      addItemToCart({
+        name: Name,
+        image: ImageUrl,
+        price: UnitPrice,
+        quantity: 1,
+      })
+    );
+  };
+
   return (
     <div key={Id} className="group relative">
       <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
@@ -31,7 +46,7 @@ export default function ProductItem({
       {/* TODO: add event handler here */}
       <button
         className="absolute z-20 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 bg-black/20 bg-opacity-0 text-white py-2 px-4 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
-        onClick={() => console.log(Id)}
+        onClick={handleAddItem}
       >
         Add to Cart
       </button>

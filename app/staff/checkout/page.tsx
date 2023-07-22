@@ -11,20 +11,23 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { cartItems, totalPrice } from "@/features/cartSlice";
+import { useToast } from "@/components/ui/use-toast";
+import { cartItems, clearCart, totalPrice } from "@/features/cartSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as z from "zod";
 
 export default function CheckoutForm() {
   const router = useRouter();
+  const { toast } = useToast();
 
   const items = useSelector(cartItems);
   const price = useSelector(totalPrice);
+  const dispatch = useDispatch();
 
   const orderSubmissionSchema = z.object({
     employeeName: z.string().nonempty({
@@ -70,12 +73,17 @@ export default function CheckoutForm() {
       const response = await axios.post("https://localhost:7133/api/v1/Order", {
         Note: data.note,
         EmployeeName: data.employeeName,
+        CustomerName: data.customerName,
         TotalCost: data.totalCost,
         OrderDetails: data.orderDetails,
       });
 
       if (response.status === 200) {
-        console.log("success");
+        toast({
+          title: "Order submitted!",
+        });
+        // remove all items from cart (in local storage)
+        dispatch(clearCart());
         router.push("/staff");
       } else {
         console.log(response);

@@ -54,7 +54,7 @@ export default function RootLayout({
               </MenuItem>
             </li>
             <li>
-              <MenuItem href="/">
+              <MenuItem href="/admin/orders">
                 <Receipt className="text-gray-500 group-hover:text-gray-700" />
                 <span className="flex-1 ml-3 whitespace-nowrap">Orders</span>
               </MenuItem>

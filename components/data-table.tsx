@@ -70,23 +70,29 @@ export function DataTable<TData, TValue>({
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <Input
-          placeholder={`Filter by ${type} name...`}
-          value={(table.getColumn("Name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("Name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        {type !== "order" && (
+          <>
+            <Input
+              placeholder={`Filter by ${type} name...`}
+              value={
+                (table.getColumn("Name")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn("Name")?.setFilterValue(event.target.value)
+              }
+              className="max-w-sm"
+            />
 
-        <Link
-          href={{
-            pathname: `${pathname}`,
-          }}
-          className="text-white text-sm bg-slate-700 hover:bg-slate-800 font-semibold py-2 px-4 rounded-md"
-        >
-          Create New
-        </Link>
+            <Link
+              href={{
+                pathname: `${pathname}`,
+              }}
+              className="text-white text-sm bg-slate-700 hover:bg-slate-800 font-semibold py-2 px-4 rounded-md"
+            >
+              Create New
+            </Link>
+          </>
+        )}
       </div>
 
       <div className="rounded-md border">

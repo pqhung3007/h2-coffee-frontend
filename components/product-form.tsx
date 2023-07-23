@@ -28,10 +28,10 @@ import { Textarea } from "./ui/textarea";
 import { useToast } from "./ui/use-toast";
 
 const categories = [
-  { label: "Juice", value: "2" },
-  { label: "Coffee", value: "3" },
-  { label: "Beverage", value: "1" },
-  { label: "Sweet", value: "4" },
+  { label: "Cà phê truyền thống", value: "1" },
+  { label: "Cà phê máy", value: "2" },
+  { label: "Trà sữa macchiato", value: "3" },
+  { label: "Fruit Tea", value: "4" },
 ] as const;
 
 const FormSchema = z.object({
@@ -40,6 +40,7 @@ const FormSchema = z.object({
   price: z.string(),
   category: z.string(),
   isSignature: z.boolean().default(false).optional(),
+  imageUrl: z.string(),
   description: z.string().min(10),
 });
 
@@ -55,6 +56,7 @@ export interface Product {
   UnitPrice: number;
   CategoryId: number;
   IsSignature: boolean;
+  ImageUrl: string;
   Description: string;
 }
 
@@ -83,6 +85,7 @@ export default function ProductForm({
     UnitPrice: 0,
     CategoryId: 0,
     IsSignature: false,
+    ImageUrl: "",
     Description: "",
   });
 
@@ -98,12 +101,15 @@ export default function ProductForm({
           setValue("productName", returnedProduct.Name);
           setValue("unitsInStock", returnedProduct.UnitsInStock.toString());
           setValue("price", returnedProduct.UnitPrice.toString());
-          setValue("category", returnedProduct.CategoryId.toString());
+          setValue("category", {
+            label: returnedProduct.Category.Name,
+            value: returnedProduct.Category.Id.toString(),
+          });
           setValue("isSignature", returnedProduct.IsSignature);
+          setValue("imageUrl", returnedProduct.ImageUrl);
           setValue("description", returnedProduct.Description);
           setProduct(returnedProduct);
-        } else {
-          console.log("failed");
+          console.log(returnedProduct);
         }
       };
       onGetProductById();
@@ -118,6 +124,7 @@ export default function ProductForm({
       price: "0",
       category: "",
       isSignature: false,
+      imageUrl: "",
       description: "",
     },
   });
@@ -143,8 +150,8 @@ export default function ProductForm({
           UnitPrice: product.UnitPrice,
           IsSignature: product.IsSignature,
           Discount: 0,
-          Status: "Inactive",
-          ImageUrl: "string",
+          Status: 1,
+          ImageUrl: product.ImageUrl,
         }
       );
 
@@ -172,8 +179,8 @@ export default function ProductForm({
           UnitPrice: parseInt(product.price),
           IsSignature: product.isSignature,
           Discount: 0,
-          Status: "Inactive",
-          ImageUrl: "string",
+          Status: 1,
+          ImageUrl: product.imageUrl,
         }
       );
 
@@ -328,6 +335,32 @@ export default function ProductForm({
                       <div className="space-y-1 leading-none">
                         <FormLabel>Is Signature</FormLabel>
                       </div>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Image URL */}
+              <div className="sm:col-span-2">
+                <FormField
+                  control={form.control}
+                  name="imageUrl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Image URL</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...register("imageUrl")}
+                          onChange={(e) => {
+                            field.onChange(e.target.value);
+                            setProduct({
+                              ...product,
+                              ImageUrl: e.target.value,
+                            });
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />

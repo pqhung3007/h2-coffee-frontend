@@ -2,8 +2,8 @@
 
 import * as z from "zod";
 
+import { getRoleByToken, loginUser } from "@/api/authen";
 import { cn } from "@/lib/utils";
-import { loginUser } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -39,23 +39,27 @@ export default function AuthForm({ className, ...props }: UserAuthFormProps) {
 
   const router = useRouter();
 
-  const { mutate: login, isLoading } = useMutation(
-    (data: z.infer<typeof formSchema>) =>
-      loginUser(data.username, data.password),
-    {
-      onSuccess: (res) => {
-        localStorage.setItem("Token", res.Token);
+  const { mutate: login, isLoading } = useMutation({
+    mutationFn: (data: z.infer<typeof formSchema>) => {
+      const token = loginUser(data.username, data.password);
+      return token;
+    },
+    onSuccess: async (res) => {
+      const role = await getRoleByToken(res);
+
+      if (role !== "Admin") {
         router.push("/admin/products");
-      },
-      onError: (err: Error) => {
-        toast({
-          variant: "destructive",
-          title: "Oh no something is wrong!",
-          description: err.message,
-        });
-      },
-    }
-  );
+      }
+      router.push("/staff");
+    },
+    onError: (err: Error) => {
+      toast({
+        variant: "destructive",
+        title: "Oh no something is wrong!",
+        description: err.message,
+      });
+    },
+  });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     login(data);

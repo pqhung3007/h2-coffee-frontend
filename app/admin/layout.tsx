@@ -33,6 +33,10 @@ export default function RootLayout({
     return <LoadingScreen />;
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem("coffee_token");
+  };
+
   return (
     <>
       <aside
@@ -99,7 +103,9 @@ export default function RootLayout({
             <li>
               <MenuItem href="/">
                 <LogOut className="text-gray-500 group-hover:text-gray-700" />
-                <span className="ml-3">Log Out</span>
+                <span className="ml-3" onClick={handleLogout}>
+                  Log Out
+                </span>
               </MenuItem>
             </li>
           </ul>

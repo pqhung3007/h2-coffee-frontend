@@ -6,6 +6,7 @@ import { getRoleByToken, loginUser } from "@/api/authen";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "./ui/button";
@@ -55,11 +56,13 @@ export default function AuthForm({ className, ...props }: UserAuthFormProps) {
       }
     },
     onError: (err: Error) => {
-      toast({
-        variant: "destructive",
-        title: "Oh no something is wrong!",
-        description: err.message,
-      });
+      if (axios.isAxiosError(err)) {
+        toast({
+          variant: "destructive",
+          title: "Oh no something is wrong!",
+          description: err?.response?.data?.Message,
+        });
+      }
     },
   });
 

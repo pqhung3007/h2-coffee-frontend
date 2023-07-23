@@ -88,7 +88,7 @@ export default function EmployeeForm({ title }: { title: string }) {
           title: "New employee created",
           description: `Welcome, ${data.firstName} ${data.lastName}!`,
         });
-        router.push("/products");
+        router.push("/admin/employees");
       } else {
         console.log(response);
       }

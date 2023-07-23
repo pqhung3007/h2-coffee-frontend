@@ -8,7 +8,7 @@ export default function useAuth() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("Token");
+    const accessToken = localStorage.getItem("coffee_token");
 
     if (!accessToken) {
       router.push("/");

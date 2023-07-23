@@ -40,17 +40,19 @@ export default function AuthForm({ className, ...props }: UserAuthFormProps) {
   const router = useRouter();
 
   const { mutate: login, isLoading } = useMutation({
-    mutationFn: (data: z.infer<typeof formSchema>) => {
-      const token = loginUser(data.username, data.password);
+    mutationFn: async (data: z.infer<typeof formSchema>) => {
+      const token = await loginUser(data.username, data.password);
+      localStorage.setItem("coffee_token", token);
       return token;
     },
     onSuccess: async (res) => {
       const role = await getRoleByToken(res);
 
-      if (role !== "Admin") {
-        router.push("/admin/products");
+      if (role === "Admin") {
+        router.push("/admin");
+      } else {
+        router.push("/staff");
       }
-      router.push("/staff");
     },
     onError: (err: Error) => {
       toast({
@@ -75,7 +77,7 @@ export default function AuthForm({ className, ...props }: UserAuthFormProps) {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>username</FormLabel>
+                  <FormLabel>Username</FormLabel>
                   <FormControl>
                     <Input placeholder="abc@gmail.com" {...field} />
                   </FormControl>
@@ -100,7 +102,7 @@ export default function AuthForm({ className, ...props }: UserAuthFormProps) {
               {isLoading && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}
-              Sign In with username
+              Sign In
             </Button>
           </div>
         </form>

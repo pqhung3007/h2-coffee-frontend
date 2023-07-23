@@ -2,6 +2,7 @@
 
 import { EmployeeDropdown } from "@/components/employee-dropdown";
 import { EmployeeNav } from "@/components/employee-nav";
+import LoadingScreen from "@/components/loading";
 import useAuth from "@/utils/useAuth";
 import { Inter } from "next/font/google";
 
@@ -19,7 +20,7 @@ export default function RootLayout({
 }) {
   const { isLoading } = useAuth();
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
 
   return (

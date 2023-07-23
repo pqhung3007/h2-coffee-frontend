@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingScreen from "@/components/loading";
 import { MenuItem } from "@/components/menu-item";
 import useAuth from "@/utils/useAuth";
 import {
@@ -29,7 +30,7 @@ export default function RootLayout({
 }) {
   const { isLoading } = useAuth();
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
 
   return (

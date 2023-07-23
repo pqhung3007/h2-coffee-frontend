@@ -41,13 +41,13 @@ export default function Home() {
         </div>
       </div>
       <div className="lg:p-8">
-        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[400px]">
           <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Admin account
+            <h1 className="text-2xl font-semibold">
+              H2 Coffee Management System
             </h1>
             <p className="text-sm text-muted-foreground">
-              Enter your email to access the admin account.
+              Enter your username to gain access.
             </p>
           </div>
           <AuthForm />

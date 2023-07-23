@@ -16,5 +16,5 @@ export const getRoleByToken = async (token: string) => {
       },
     }
   );
-  return response.data;
+  return response.data.RoleName;
 };

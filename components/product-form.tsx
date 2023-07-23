@@ -160,7 +160,7 @@ export default function ProductForm({
           title: "Product updated",
         });
         // redirect to product list
-        router.push("/products");
+        router.push("/admin/products");
       }
     } catch (error) {
       console.log(error);

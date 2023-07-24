@@ -1,9 +1,7 @@
-import axios from "axios";
+import api from ".";
 
 export async function getOrders() {
-  const response = await axios.get(
-    "https://localhost:7133/api/v1/Order/GetAllOrders?Offset=0&Limit=10"
-  );
+  const response = await api.get("/Order/GetAllOrders?Offset=0&Limit=10");
   if (!response.data) {
     throw new Error(response.statusText);
   }

@@ -18,7 +18,7 @@ export function MenuItem({
       href={href}
       className={
         "flex items-center p-2 text-gray-800 transition duration-75 rounded-lg hover:bg-gray-100 group dark:text-white group" +
-        (isActive ? " bg-emerald-200" : "")
+        (isActive ? " bg-slate-200" : "")
       }
     >
       {children}

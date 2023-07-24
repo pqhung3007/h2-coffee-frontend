@@ -1,21 +1,10 @@
 import { DataTable } from "@/components/data-table";
-import axios from "axios";
 
+import { getAllCategories } from "@/api/categories";
 import { columns } from "./columns";
 
-async function getCategories(): Promise<any> {
-  const response = await axios.get(
-    "https://localhost:7133/api/v1/Category/GetAllCategories"
-  );
-  if (!response.data) {
-    throw new Error(response.statusText);
-  }
-
-  return response.data;
-}
-
 export default async function DemoPage() {
-  const data = await getCategories();
+  const data = await getAllCategories();
 
   return (
     <div className="container mx-auto py-10">

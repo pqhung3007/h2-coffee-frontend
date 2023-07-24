@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import axios from "axios";
+import { createProduct, getProductById, updateProduct } from "@/api/products";
 import { useEffect, useState } from "react";
 import { Checkbox } from "./ui/checkbox";
 import {
@@ -92,24 +92,20 @@ export default function ProductForm({
   useEffect(() => {
     if (!isAddMode) {
       const onGetProductById = async () => {
-        const response = await axios.get(
-          `https://localhost:7133/api/v1/Product/${id}`
-        );
-        if (response.status === 200) {
-          const returnedProduct = response.data;
-
-          setValue("productName", returnedProduct.Name);
-          setValue("unitsInStock", returnedProduct.UnitsInStock.toString());
-          setValue("price", returnedProduct.UnitPrice.toString());
+        const response = await getProductById(id);
+        if (response) {
+          setValue("productName", response.Name);
+          setValue("unitsInStock", response.UnitsInStock.toString());
+          setValue("price", response.UnitPrice.toString());
           setValue("category", {
-            label: returnedProduct.Category.Name,
-            value: returnedProduct.Category.Id.toString(),
+            label: response.Category.Name,
+            value: response.Category.Id.toString(),
           });
-          setValue("isSignature", returnedProduct.IsSignature);
-          setValue("imageUrl", returnedProduct.ImageUrl);
-          setValue("description", returnedProduct.Description);
-          setProduct(returnedProduct);
-          console.log(returnedProduct);
+          setValue("isSignature", response.IsSignature);
+          setValue("imageUrl", response.ImageUrl);
+          setValue("description", response.Description);
+          setProduct(response);
+          console.log(response);
         }
       };
       onGetProductById();
@@ -139,21 +135,18 @@ export default function ProductForm({
 
   const onUpdateProduct = async () => {
     try {
-      const response = await axios.post(
-        "https://localhost:7133/api/v1/Product/UpdateProduct",
-        {
-          Id: id,
-          Name: product.Name,
-          CategoryId: product.CategoryId,
-          UnitsInStock: product.UnitsInStock,
-          Description: product.Description,
-          UnitPrice: product.UnitPrice,
-          IsSignature: product.IsSignature,
-          Discount: 0,
-          Status: 1,
-          ImageUrl: product.ImageUrl,
-        }
-      );
+      const response = await updateProduct({
+        Id: id,
+        Name: product.Name,
+        CategoryId: product.CategoryId,
+        UnitsInStock: product.UnitsInStock,
+        Description: product.Description,
+        UnitPrice: product.UnitPrice,
+        IsSignature: product.IsSignature,
+        Discount: 0,
+        Status: 1,
+        ImageUrl: product.ImageUrl,
+      });
 
       if (response.status === 200) {
         toast({
@@ -169,21 +162,7 @@ export default function ProductForm({
 
   const onCreateProduct = async (product: z.infer<typeof FormSchema>) => {
     try {
-      const response = await axios.post(
-        "https://localhost:7133/api/v1/Product/CreateProduct",
-        {
-          Name: product.productName,
-          CategoryId: parseInt(product.category),
-          UnitsInStock: parseInt(product.unitsInStock),
-          Description: product.description,
-          UnitPrice: parseInt(product.price),
-          IsSignature: product.isSignature,
-          Discount: 0,
-          Status: 1,
-          ImageUrl: product.imageUrl,
-        }
-      );
-
+      const response = await createProduct(product);
       if (response.status === 200) {
         toast({
           title: "Product created",

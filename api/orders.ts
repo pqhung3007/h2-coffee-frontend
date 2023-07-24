@@ -7,3 +7,15 @@ export async function getOrders() {
   }
   return response.data.Items;
 }
+
+export async function createOrder(data: any) {
+  const response = await api.post("/Order", {
+    Note: data.note,
+    EmployeeName: data.employeeName,
+    CustomerName: data.customerName,
+    TotalCost: data.totalCost,
+    OrderDetails: data.orderDetails,
+  });
+
+  return response.data;
+}

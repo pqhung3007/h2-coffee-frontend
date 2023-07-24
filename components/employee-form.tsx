@@ -1,8 +1,8 @@
 "use client";
 
+import { createUser } from "@/api/user";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { format } from "date-fns";
 import { CalendarDays } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -70,20 +70,8 @@ export default function EmployeeForm({ title }: { title: string }) {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
-      const response = await axios.post(
-        "https://localhost:7133/api/v1/User/CreateUser",
-        {
-          Username: data.userName,
-          Password: data.password,
-          FirstName: data.firstName,
-          LastName: data.lastName,
-          City: data.city,
-          Phone: data.phoneNumber,
-          DateOfBirth: data.dob,
-        }
-      );
-
-      if (response.status === 200) {
+      const response = await createUser(data);
+      if (response) {
         toast({
           title: "New employee created",
           description: `Welcome, ${data.firstName} ${data.lastName}!`,

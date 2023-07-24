@@ -1,5 +1,6 @@
 "use client";
 
+import { deleteProduct } from "@/api/products";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,7 +21,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteProduct } from "@/utils/api";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";

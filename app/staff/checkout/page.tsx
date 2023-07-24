@@ -1,5 +1,6 @@
 "use client";
 
+import { createOrder } from "@/api/orders";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,7 +15,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { cartItems, clearCart, totalPrice } from "@/features/cartSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -70,15 +70,9 @@ export default function CheckoutForm() {
 
   const onSubmit = async (data: z.infer<typeof orderSubmissionSchema>) => {
     try {
-      const response = await axios.post("https://localhost:7133/api/v1/Order", {
-        Note: data.note,
-        EmployeeName: data.employeeName,
-        CustomerName: data.customerName,
-        TotalCost: data.totalCost,
-        OrderDetails: data.orderDetails,
-      });
+      const response = await createOrder(data);
 
-      if (response.status === 200) {
+      if (response) {
         toast({
           title: "Order submitted!",
         });
